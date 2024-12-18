@@ -36,6 +36,7 @@ def main_menu():
         else:
             print("Invalid choice, try again please.")
 
+
 def add_new_student():
     print("\n--- Add New Student ---")
     name = input("Enter student name: ").strip()
@@ -53,6 +54,7 @@ def add_new_student():
         session.add(new_student)
         session.commit()
         print(f"Student '{name}' added successfully!")
+
 
 def record_new_student():
     print("\n--- Record Attendance ---")
@@ -88,6 +90,7 @@ def record_new_student():
     session.commit()
     print(f"Attendance recorded for {student.name} on {date} as {status}.")
 
+
 def view_student_attendance():
     print("\n--- View Student Attendance ---")
     student_id = input("Enter student ID: ")
@@ -105,8 +108,26 @@ def view_student_attendance():
     for attendance in attendances:
         print(f"Date: {attendance.date}, Status: {attendance.status}")
 
+
 def view_day_attendance():
-    pass
+    print("\n--- View Day attendance ---")
+    date_input = input("Enter the daye (YYYY-MM-DD): ").strip()
+    try:
+        date = datetime.datetime.strptime(date_input, "%Y-%m-%d").date()
+    except ValueError:
+        print("Invalid date format, please use YYYY-MM-DD.")
+        return
+    
+    attendances = session.query(Attendance).filter_by(date=date).all()
+    if not attendances:
+        print(f"No attendances recprds found for {date}.")
+        return
+    
+    print(f"\nAttendance record for {date}: ")
+    for attendance in attendances:
+        student = session.query(Student).filter_by(id=attendance.student_id).first()
+        print(f"{student.name}: {attendance.status}")
+
 
 def update_attendance():
     pass
