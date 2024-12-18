@@ -16,8 +16,8 @@ A Python-based Command-Line Interface (CLI) application for managing student att
 
 # installing
 1. Clone repo:
-    - git clone <git@github.com:Muhsin5-tech/phase3-cli-attendance-tracker.git>
-    - cd <phase3-cli-attendance-tracker>
+    - git clone git@github.com:Muhsin5-tech/phase3-cli-attendance-tracker.git
+    - cd phase3-cli-attendance-tracker
     - pipenv install - install dependencies
     - pipenv shell - activate environment
     - python -m lib.cli - start cli application
