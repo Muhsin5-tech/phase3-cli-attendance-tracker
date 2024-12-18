@@ -8,6 +8,8 @@ from lib.models.student import Student
 from lib.models.attendance import Attendance
 from database import session
 
+ATTENDANCE_STATUS = ("present", "absent")
+
 def main_menu():
     while True:
         print("\n=== Class Attendance Tracker ===")
@@ -63,9 +65,10 @@ def record_new_student():
         print("No student found, please add a student first.")
         return
     
+    student_tuple = [(student.id, student.name) for student in students]
     print("\nSelect a student: ")
-    for student in students:
-        print(f"{student.id}. {student.name}. (Age: {student.age})")
+    for sid, name in student_tuple:
+        print(f"{sid}. {name}")
 
     student_id = input("Enter student ID: ").strip()
     student = session.query(Student).filter_by(id=student_id).first()
@@ -81,8 +84,8 @@ def record_new_student():
         return
     
     status = input("Enter attendance status (present/absent): ")
-    if status not in ["present", "absent"]:
-        print("Invalid input, please use 'present' or 'absent'.")
+    if status not in ATTENDANCE_STATUS:
+        print(f"Invalid input. Choose from {ATTENDANCE_STATUS}.")
         return
     
     new_attendance = Attendance(student_id=student.id, date=date, status=status)
@@ -104,9 +107,10 @@ def view_student_attendance():
         print(f"No attencance records for {student.name}.")
         return
     
+    attendance_summary = [(attendance.date, attendance.status) for attendance in attendances]
     print(f"\nAttendance records for {student.name}: ")
-    for attendance in attendances:
-        print(f"Date: {attendance.date}, Status: {attendance.status}")
+    for record in attendance_summary:
+        print(f"Date: {record[0]}, Status: {record[1]}")
 
 
 def view_day_attendance():
@@ -151,7 +155,7 @@ def update_attendance():
     
     new_status = input(f"Curent status is {attendance.status}. Enter new status (present/absent): ")
     if new_status not in ["present", "absent"]:
-        print("Invalid input, please use 'present' or 'absent'.")
+        print(f"Invalid input. Choose from {ATTENDANCE_STATUS}")
         return
     
     attendance.status = new_status
