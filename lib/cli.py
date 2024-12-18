@@ -89,7 +89,21 @@ def record_new_student():
     print(f"Attendance recorded for {student.name} on {date} as {status}.")
 
 def view_student_attendance():
-    pass
+    print("\n--- View Student Attendance ---")
+    student_id = input("Enter student ID: ")
+    student = session.query(Student).filter_by(id=student_id).first()
+    if not student:
+        print("Student not found, try again")
+        return
+    
+    attendances = session.query(Attendance).filter_by(student_id=student.id).all()
+    if not attendances:
+        print(f"No attencance records for {student.name}.")
+        return
+    
+    print(f"\nAttendance records for {student.name}: ")
+    for attendance in attendances:
+        print(f"Date: {attendance.date}, Status: {attendance.status}")
 
 def view_day_attendance():
     pass
