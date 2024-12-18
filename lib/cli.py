@@ -130,7 +130,33 @@ def view_day_attendance():
 
 
 def update_attendance():
-    pass
+    print("\n--- Update Attendance Record ---")
+    student_id = input("Enter student ID: ").strip()
+    student = session.query(Student).filter_by(id=student_id).first()
+    if not student:
+        print("Student not found, try again.")
+        return
+    
+    date_input = input("Enter the date (YYYY-MM-DD): ").strip()
+    try:
+        date = datetime.datetime.strptime(date_input, "%Y-%m-%d").date()
+    except ValueError:
+        print("Invalid date format, please use YYYY-MM-DD.")
+        return
+
+    attendance = session.query(Attendance).filter_by(student_id=student.id, date=date).first()
+    if not attendance:
+        print(f"No attendance record found for {student.name} on {date}.")
+        return
+    
+    new_status = input(f"Curent status is {attendance.status}. Enter new status (present/absent): ")
+    if new_status not in ["present", "absent"]:
+        print("Invalid input, please use 'present' or 'absent'.")
+        return
+    
+    attendance.status = new_status
+    session.commit()
+    print(f"Attendance for {student.name} on {date} updated to {new_status}.")
     
 if __name__ == "__main__":
     main_menu()
