@@ -20,5 +20,5 @@ A Python-based Command-Line Interface (CLI) application for managing student att
     - cd phase3-cli-attendance-tracker
     - pipenv install - install dependencies
     - pipenv shell - activate environment
-    - python -m lib.cli - start cli application
+    - python cli.py - start cli application
 
